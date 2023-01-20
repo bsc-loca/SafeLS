@@ -1,0 +1,5 @@
+./hdl/l_noelvcpu.vhd
+./hdl/l_noelvcpu_pkg.vhd
+./hdl/l_comparator.vhd
+./hdl/l_comparator_pkg.vhd
+
