@@ -8,10 +8,8 @@ library gaisler;
 use gaisler.noelvint.all;
 use gaisler.noelv.all;
 use gaisler.arith.all;
--- library techmap;
--- use techmap.gencomp.all;
 
--- Package Declaration Section
+
 package l_noelvcpu_pkg is
 
 
@@ -51,13 +49,40 @@ package l_noelvcpu_pkg is
   end component l_noelvcpu;
 
 
+  component l_register_output_generator is
+    port (
+      clk           : in  std_ulogic; 
+      rstn          : in  std_ulogic; 
+      in_ahbo        : in ahb_mst_out_type; 
+      in_irqo        : in nv_irq_out_type;    
+      in_dbgo        : in nv_debug_out_type;  
+      in_eto         : in nv_etrace_out_type;
+      in_cnt         : in nv_counter_out_type; 
+      ahbo        : out ahb_mst_out_type; 
+      irqo        : out nv_irq_out_type;    
+      dbgo        : out nv_debug_out_type;  
+      eto         : out nv_etrace_out_type;
+      cnt         : out nv_counter_out_type  
+      );
+  end component;
 
 
-
-
-
-
-
+  component l_register_input_generator is
+    port (
+      clk           : in  std_ulogic; 
+      rstn          : in  std_ulogic; 
+      ahbi        : in  ahb_mst_in_type;
+      ahbsi       : in  ahb_slv_in_type;
+      ahbso       : in  ahb_slv_out_vector; 
+      irqi        : in  nv_irq_in_type;     
+      dbgi        : in  nv_debug_in_type;   
+      out_ahbi        : out  ahb_mst_in_type;
+      out_ahbsi       : out  ahb_slv_in_type;
+      out_ahbso       : out  ahb_slv_out_vector; 
+      out_irqi        : out  nv_irq_in_type;     
+      out_dbgi        : out  nv_debug_in_type 
+      );
+  end component;
 
 
 end package;

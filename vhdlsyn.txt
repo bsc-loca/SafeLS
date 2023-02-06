@@ -2,4 +2,5 @@
 ./hdl/l_noelvcpu_pkg.vhd
 ./hdl/l_comparator.vhd
 ./hdl/l_comparator_pkg.vhd
-
+./hdl/l_register_input_generator.vhd
+./hdl/l_register_output_generator.vhd
