@@ -9,11 +9,6 @@ use gaisler.noelvint.all;
 use gaisler.noelv.all;
 use gaisler.arith.all;
 
---library safety;
---use safety.l_comparator_pkg.all;
-
---library techmap;
---use techmap.gencomp.all;
 
 entity l_noelvcpu is
   generic (
@@ -47,7 +42,6 @@ entity l_noelvcpu is
     dbgo  : out nv_debug_out_type;
     eto   : out nv_etrace_out_type;
     cnt   : out nv_counter_out_type
-    --equal : out std_logic     -- 0 - Outs of Cores Equals, 1 Not equals
     );
 end;
 
@@ -55,60 +49,41 @@ architecture hier of l_noelvcpu is
 
   component l_comparator is
     port (
-      clk           : in  std_ulogic; -- cpu clock
+      clk           : in  std_ulogic; 
       rstn          : in  std_ulogic; 
-      
-      -------------------------------------------------------------------------------------------
-        -- Front Signals CMP - NoelVCPU
-      -------------------------------------------------------------------------------------------
-  
+
       ahbi        : in  ahb_mst_in_type;
-      ahbo        : out ahb_mst_out_type; -- pertanyen a la MMU/Cache Controller
+      ahbo        : out ahb_mst_out_type; 
       ahbsi       : in  ahb_slv_in_type;
-      ahbso       : in  ahb_slv_out_vector; -- pertanyen a la MMU/Cache Controller
-      ------------------------------------------------------------------- End bus signals
-      irqi        : in  nv_irq_in_type;     -- irq in
-      irqo        : out nv_irq_out_type;    -- irq out
-      ------------------------------------------------------------------- End Interrupt signals
-      dbgi        : in  nv_debug_in_type;   -- debug in
-      dbgo        : out nv_debug_out_type;  -- debug out
-      ------------------------------------------------------------------- End debug signals
+      ahbso       : in  ahb_slv_out_vector;  
+      irqi        : in  nv_irq_in_type;     
+      irqo        : out nv_irq_out_type;    
+      dbgi        : in  nv_debug_in_type;   
+      dbgo        : out nv_debug_out_type;  
       eto         : out nv_etrace_out_type;
-      cnt         : out nv_counter_out_type; -- Perf event Out Port
-  
+      cnt         : out nv_counter_out_type; 
       
-      -------------------------------------------------------------------------------------------
-        -- Signals CPUCoreNV - CMP
-      -------------------------------------------------------------------------------------------
-  
-       -- Master Signals 
-  
       mahbi        : out  ahb_mst_in_type;
       mahbsi       : out  ahb_slv_in_type;
-      mahbso       : out  ahb_slv_out_vector; -- pertanyen a la MMU/Cache Controller
-      mirqi        : out  nv_irq_in_type;     -- irq in
-      mdbgi        : out  nv_debug_in_type;   -- debug in
-  
-      mirqo        : in nv_irq_out_type;    -- irq out
-      mahbo        : in ahb_mst_out_type; -- pertanyen a la MMU/Cache Controller
-      mdbgo        : in nv_debug_out_type;  -- debug out
+      mahbso       : out  ahb_slv_out_vector; 
+      mirqi        : out  nv_irq_in_type;     
+      mdbgi        : out  nv_debug_in_type;   
+      mirqo        : in nv_irq_out_type;    
+      mahbo        : in ahb_mst_out_type; 
+      mdbgo        : in nv_debug_out_type; 
       meto         : in nv_etrace_out_type;
-      mcnt         : in nv_counter_out_type; -- Perf event Out Port
-  
-  
-       -- Slave Signals
-  
+      mcnt         : in nv_counter_out_type;
+
       sahbi        : out  ahb_mst_in_type;
       sahbsi       : out  ahb_slv_in_type;
-      sahbso       : out  ahb_slv_out_vector; -- pertanyen a la MMU/Cache Controller
-      sirqi        : out  nv_irq_in_type;     -- irq in
-      sdbgi        : out  nv_debug_in_type;   -- debug in
-  
-      sirqo        : in nv_irq_out_type;    -- irq out
-      sahbo        : in ahb_mst_out_type; -- pertanyen a la MMU/Cache Controller
-      sdbgo        : in nv_debug_out_type;  -- debug out
+      sahbso       : out  ahb_slv_out_vector; 
+      sirqi        : out  nv_irq_in_type;     
+      sdbgi        : out  nv_debug_in_type;   
+      sirqo        : in nv_irq_out_type;    
+      sahbo        : in ahb_mst_out_type; 
+      sdbgo        : in nv_debug_out_type; 
       seto         : in nv_etrace_out_type;
-      scnt         : in nv_counter_out_type -- Perf event Out Port
+      scnt         : in nv_counter_out_type 
       );
   end component l_comparator;
 
@@ -785,7 +760,6 @@ begin
       dbgo            => dbgo,
       eto             => eto,
       cnt             => cnt,
-      --equal           => equal,
         -- MASTER
       mahbi            => msig_ahbi,
       mahbo            => msig_ahbo,
