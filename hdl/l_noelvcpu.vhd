@@ -49,7 +49,10 @@ architecture hier of l_noelvcpu is
 
 attribute DONT_TOUCH : string;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> aa1d47a5daf513318239ff83ba7138b7e8a20959
   component l_comparator is
     port (
       clk           : in  std_ulogic; 
