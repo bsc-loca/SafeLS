@@ -47,6 +47,9 @@ end;
 
 architecture hier of l_noelvcpu is
 
+attribute DONT_TOUCH : string;
+
+
   component l_comparator is
     port (
       clk           : in  std_ulogic; 
@@ -544,6 +547,8 @@ architecture hier of l_noelvcpu is
       btbsets       => 2),
     others => cfg_none
     );
+
+attribute DONT_TOUCH of cmp0 : label is "TRUE";
 
 begin
   vcc <= '1'; gnd <= '0';
