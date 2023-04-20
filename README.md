@@ -6,6 +6,7 @@ The Safe Lockstep (SafeLS for short) unit is a a RISC-V open source lockstep cor
 
 The sphere of replication is at a core level, so the NOEL-V core and its signals are replicated. Then, the input signals are routed to the master core, while in the shadow core (the replicated core), the data will pass to staggering registers to desynchronize the cores to ensure that both of them are in different phases of execution. When the master core has the results, these are sent through the output signals to the staggering registers. Thus, the results of the master core are saved until the results of the shadow core are sent. Then the results of both cores are compared to detect any fault. The signal "error" will be activated if there is any issue.
 See the following figure:
+![alt text](docs/ls_fig1.PNG)
 
 ## Reference
 If you are using the SafeLS for an academic publication, please cite the following paper:
