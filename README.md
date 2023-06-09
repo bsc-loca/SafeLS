@@ -12,6 +12,7 @@ The architecture described can be seen in the picture below:
 
 ## Reference
 If you are using the SafeLS for an academic publication, please cite the following paper:
+(Waiting publish paper to appear)
 
 
 # Future work

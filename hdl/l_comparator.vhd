@@ -10,20 +10,17 @@ use gaisler.noelv.all;
 library safety;
 use safety.l_noelvcpu_pkg.all;
 
-
-
 entity l_comparator is
   generic (
-    ncycles  : integer := 2      
+    ncycles  : integer := 2 --! Number of cycles between the two executions (staggering)
     );
   port (
 
-    clk           : in  std_ulogic; 
-    rstn          : in  std_ulogic; 
+    clk           : in  std_ulogic; --! Generic Clock signal
+    rstn          : in  std_ulogic; --! Generic Reset signal
     
-    -- Front Signals CMP - NoelVCPU
-    ahbi        : in  ahb_mst_in_type;
-    ahbo        : out ahb_mst_out_type; 
+    ahbi        : in  ahb_mst_in_type; --! Front Signals CMP - NoelVCPU (ahb  input)
+    ahbo        : out ahb_mst_out_type; --! Front Signals CMP - NoelVCPU (ahb  output)
     ahbsi       : in  ahb_slv_in_type;
     ahbso       : in  ahb_slv_out_vector; 
     irqi        : in  nv_irq_in_type;     
@@ -33,10 +30,9 @@ entity l_comparator is
     eto         : out nv_etrace_out_type;
     cnt         : out nv_counter_out_type; 
 
-    --equal         : out std_logic; 
     equals        : out std_logic_vector(4 DOWNTO 0); 
 
-    -- Master Signals 
+    --! Master Signals 
     mahbi        : out  ahb_mst_in_type;
     mahbsi       : out  ahb_slv_in_type;
     mahbso       : out  ahb_slv_out_vector; 
@@ -48,7 +44,7 @@ entity l_comparator is
     meto         : in nv_etrace_out_type;
     mcnt         : in nv_counter_out_type; 
 
-     -- Slave Signals
+    --! Slave Signals
     sahbi        : out  ahb_mst_in_type;
     sahbsi       : out  ahb_slv_in_type;
     sahbso       : out  ahb_slv_out_vector; 
@@ -91,7 +87,7 @@ architecture rtl of l_comparator is
 
   signal v_ahbi        : t_ahbi;
   signal v_ahbsi       : t_ahbsi;
-  signal v_ahbso       : t_ahbso; -- 
+  signal v_ahbso       : t_ahbso; 
   signal v_irqi        : t_irqi;    
   signal v_dbgi        : t_dbgi;  
   signal v_irqo       : t_sirqo;    
@@ -121,7 +117,7 @@ begin
   v_irqi(0)  <= irqi;
   v_dbgi(0)  <= dbgi;
 
-
+  --! Loops that creates the staggering between the two executions delaying the inputs
   in_reg_loop: for c in 0 to ncycles generate
     l_in_if_0: if (c < ncycles) generate
       in_reg: l_register_input_generator
@@ -167,7 +163,7 @@ begin
   sdbgi <= rreg_dbgi; 
 
 
-  -- Assignació directa de les entrades a Head
+  --! Direct assignation of the inputs to the head core
   mahbi  <= ahbi;
   mahbsi <= ahbsi;
   mahbso <= ahbso;
@@ -181,7 +177,7 @@ begin
   v_eto(0) <= meto;      
   v_cnt(0) <= mcnt; 
 
-
+--! Loops that creates the staggering between the two executions delaying the outputs
   out_reg_loop: for c in 0 to ncycles generate
     l_out_if_0: if (c < ncycles) generate
       out_reg: l_register_output_generator
@@ -219,7 +215,7 @@ begin
     end generate; 
   end generate; 
     
-
+--! TBD
   outputs_reg: process(rreg_ahbo, rreg_dbgo) 
   begin
     if rising_edge(clk) then 
@@ -231,7 +227,7 @@ begin
     end if;
   end process;
 
-
+--! TBD
   out_hold_slv: process(sahbo, sdbgo)
   begin
     if rising_edge(clk) then 
@@ -243,36 +239,31 @@ begin
     end if;
   end process;
 
-
+--! Process which performs the comparison of the outputs to AHB
   ahbo0: process (clk, reg_ahbo, reg_dbgo)
   begin
     if rising_edge(clk) then 
-      --equal <= '0';
       equals <= (others =>'0');
       if (reg_hsahbo /= reg_ahbo) then   
-        --equal <= '1';
         equals(4) <= '1'; 
       end if;
       if (reg_hsirqo /= reg_irqo) then 
-        --equal <= '1'; 
         equals(3) <= '1';
       end if;
       if (reg_hsdbgo /= reg_dbgo) then 
-        --equal <= '1'; 
         equals(2) <= '1';
       end if;
       if (reg_hseto /= reg_eto) then 
-        --equal <= '1';  
         equals(1) <= '1';    
       end if;
       if (reg_hscnt /= reg_cnt) then
-        --equal <= '1'; 
         equals(0) <= '1';
       end if;
     end if;
   end process;
 
-    -- Deixem passar les sortides de Head cap a fora del core 
+    --! Let the head outputs directly outside (before the comparison)
+    --! Future work to do this **after** the comparison
     ahbo <= mahbo;
     irqo <= mirqo;
     dbgo <= mdbgo;

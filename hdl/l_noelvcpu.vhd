@@ -1,3 +1,6 @@
+--! This file includes the instantiation of two NOEL-V cores that are going to 
+--! operate in lockstep mode. For this, a comparator module is also instantiated 
+--! that performs the comparison of NOEL-V outputs
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -30,8 +33,8 @@ entity l_noelvcpu is
     scantest : integer
     );
   port (
-    clk   : in  std_ulogic;
-    rstn  : in  std_ulogic;
+    clk   : in  std_ulogic; --! Clock signal
+    rstn  : in  std_ulogic; --! Reset signal
     ahbi  : in  ahb_mst_in_type;
     ahbo  : out ahb_mst_out_type;
     ahbsi : in  ahb_slv_in_type;
@@ -47,12 +50,12 @@ end;
 
 architecture hier of l_noelvcpu is
 
-attribute DONT_TOUCH : string;
+attribute DONT_TOUCH : string; --! Added to ensure that the synthesis tool does not remove unused signals (required to measure the hw overhead while the interruption is not connected)
 
   component l_comparator is
     port (
-      clk           : in  std_ulogic; 
-      rstn          : in  std_ulogic; 
+      clk           : in  std_ulogic; --! Clock signal
+      rstn          : in  std_ulogic; --! Reset signal
 
       ahbi        : in  ahb_mst_in_type;
       ahbo        : out ahb_mst_out_type; 
@@ -551,20 +554,20 @@ attribute DONT_TOUCH of cmp0 : label is "TRUE";
 
 begin
   vcc <= '1'; gnd <= '0';
-
-  u0 : cpucorenv -- NOEL-V Core MASTER
+--! NOEL-V Core MASTER
+  u0 : cpucorenv
     generic map (
       hindex          => hindex,    
       fabtech         => fabtech,
       memtech         => memtech,
-      -- BHT
+      --! BHT
       bhtentries      => cfg_c(cfg).bhtentries,
       bhtlength       => cfg_c(cfg).bhtlength,
       predictor       => cfg_c(cfg).predictor,
-      -- BTB
+      --! BTB
       btbentries      => cfg_c(cfg).btbentries,
       btbsets         => cfg_c(cfg).btbsets,
-      -- Caches
+      --! Caches
       icen            => cfg_c(cfg).icen,
       iways           => cfg_c(cfg).iways,
       ilinesize       => cfg_c(cfg).ilinesize,
@@ -573,7 +576,7 @@ begin
       dways           => cfg_c(cfg).dways,
       dlinesize       => cfg_c(cfg).dlinesize,
       dwaysize        => cfg_c(cfg).dwaysize,
-      -- MMU
+      --! MMU
       mmuen           => cfg_c(cfg).mmuen,
       itlbnum         => cfg_c(cfg).itlbnum,
       dtlbnum         => cfg_c(cfg).dtlbnum,
@@ -583,7 +586,7 @@ begin
       pmp_no_tor      => cfg_c(cfg).pmp_no_tor,
       pmp_entries     => cfg_c(cfg).pmp_entries,
       pmp_g           => cfg_c(cfg).pmp_g,
-      -- Extensions
+      --! Extensions
       ext_m           => cfg_c(cfg).ext_m,
       ext_a           => cfg_c(cfg).ext_a,
       ext_c           => cfg_c(cfg).ext_c,
@@ -600,10 +603,10 @@ begin
       mode_u          => cfg_c(cfg).mode_u,
       fpulen          => cfg_c(cfg).fpulen,
       trigger         => cfg_c(cfg).trigger,
-      -- Advanced Features
+      --! Advanced Features
       late_branch     => cfg_c(cfg).late_branch,
       late_alu        => cfg_c(cfg).late_alu,
-      -- Core
+      --! Core
       cached          => cached,
       wbmask          => wbmask,
       busw            => busw,
@@ -615,7 +618,7 @@ begin
       tbuf            => cfg_c(cfg).tbuf,
       physaddr        => 32,
       rstaddr         => 16#C0000#,
-      -- Misc
+      --! Misc
       dmen            => 1,
       pbaddr          => pbaddr,
       disas           => disas,
@@ -651,20 +654,20 @@ begin
 
 
 
-
-  u1 : cpucorenv -- NOEL-V Core SLAVE
+--! NOEL-V Core SLAVE
+  u1 : cpucorenv
     generic map (
       hindex          => hindex, 
       fabtech         => fabtech,
       memtech         => memtech,
-      -- BHT
+      --! BHT
       bhtentries      => cfg_c(cfg).bhtentries,
       bhtlength       => cfg_c(cfg).bhtlength,
       predictor       => cfg_c(cfg).predictor,
-      -- BTB
+      --! BTB
       btbentries      => cfg_c(cfg).btbentries,
       btbsets         => cfg_c(cfg).btbsets,
-      -- Caches
+      --! Caches
       icen            => cfg_c(cfg).icen,
       iways           => cfg_c(cfg).iways,
       ilinesize       => cfg_c(cfg).ilinesize,
@@ -673,7 +676,7 @@ begin
       dways           => cfg_c(cfg).dways,
       dlinesize       => cfg_c(cfg).dlinesize,
       dwaysize        => cfg_c(cfg).dwaysize,
-      -- MMU
+      --! MMU
       mmuen           => cfg_c(cfg).mmuen,
       itlbnum         => cfg_c(cfg).itlbnum,
       dtlbnum         => cfg_c(cfg).dtlbnum,
@@ -683,7 +686,7 @@ begin
       pmp_no_tor      => cfg_c(cfg).pmp_no_tor,
       pmp_entries     => cfg_c(cfg).pmp_entries,
       pmp_g           => cfg_c(cfg).pmp_g,
-      -- Extensions
+      --! Extensions
       ext_m           => cfg_c(cfg).ext_m,
       ext_a           => cfg_c(cfg).ext_a,
       ext_c           => cfg_c(cfg).ext_c,
@@ -700,10 +703,10 @@ begin
       mode_u          => cfg_c(cfg).mode_u,
       fpulen          => cfg_c(cfg).fpulen,
       trigger         => cfg_c(cfg).trigger,
-      -- Advanced Features
+      --! Advanced Features
       late_branch     => cfg_c(cfg).late_branch,
       late_alu        => cfg_c(cfg).late_alu,
-      -- Core
+      --! Core
       cached          => cached,
       wbmask          => wbmask,
       busw            => busw,
@@ -715,7 +718,7 @@ begin
       tbuf            => cfg_c(cfg).tbuf,
       physaddr        => 32,
       rstaddr         => 16#C0000#,
-      -- Misc
+      --! Misc
       dmen            => 1,
       pbaddr          => pbaddr,
       disas           => disas,
@@ -748,12 +751,12 @@ begin
       eto             => ssig_eto,
       cnt             => ssig_cnt
       );
-
-  cmp0 : l_comparator -- Comparator
+--! Comparator
+  cmp0 : l_comparator 
     port map (
       clk             => clk,
       rstn            => rstn,
-        -- SIGNALS TO NOELVCPU
+--! SIGNALS TO NOELVCPU
       ahbi            => ahbi,
       ahbo            => ahbo,
       ahbsi           => ahbsi,
@@ -764,7 +767,7 @@ begin
       dbgo            => dbgo,
       eto             => eto,
       cnt             => cnt,
-        -- MASTER
+--! MASTER Signals
       mahbi            => msig_ahbi,
       mahbo            => msig_ahbo,
       mahbsi           => msig_ahbsi,
@@ -775,7 +778,7 @@ begin
       mdbgo            => msig_dbgo,
       meto             => msig_eto,
       mcnt             => msig_cnt,
-        -- SLAVE
+--! SLAVE Signals
       sahbi            => ssig_ahbi,
       sahbo            => ssig_ahbo,
       sahbsi           => ssig_ahbsi,
@@ -787,10 +790,4 @@ begin
       seto             => ssig_eto,
       scnt             => ssig_cnt      
       );
-
-
-
-
-
-
 end;
