@@ -12,7 +12,8 @@ The architecture described can be seen in the picture below:
 
 ## Reference
 If you are using the SafeLS for an academic publication, please cite the following paper:
-M. Sarraseca et al., "SafeLS: An Open Source Implementation of a Lockstep NOEL-V RISC-V Core," 2023 IEEE 29th International Symposium on On-Line Testing and Robust System Design (IOLTS), Crete, Greece, 2023, pp. 1-7, doi: [10.1109/IOLTS59296.2023.10224867](https://10.1109/IOLTS59296.2023.10224867).
+
+- M. Sarraseca et al., "SafeLS: An Open Source Implementation of a Lockstep NOEL-V RISC-V Core," 2023 IEEE 29th International Symposium on On-Line Testing and Robust System Design (IOLTS), Crete, Greece, 2023, pp. 1-7, doi: [10.1109/IOLTS59296.2023.10224867](https://10.1109/IOLTS59296.2023.10224867).
 
 
 ```
